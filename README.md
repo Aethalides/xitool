@@ -1,2 +1,2 @@
 # xitool
-Fork of xorg-xinput
+Tool to interact with Xinput devices, complements the xorg-xinput tool.
