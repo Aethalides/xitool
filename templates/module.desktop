@@ -1,0 +1,15 @@
+[General]
+Name=xitool module
+Comment=A module for the xitool program. Includes header and c file
+Category=C
+Files=Header,Implementation
+
+[Header]
+Name=Header
+File=module.h
+OutputFile={{ name }}.h
+
+[Implementation]
+Name=Implementation
+File=module.c
+OutputFile={{ name }}.c

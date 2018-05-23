@@ -13,16 +13,4 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
-#include <stdlib.h>
-#include "resources.h"
-#include "xiversion.h"
-
-int list(int argc, char **argv) {
-	
-	Display *dpy=openDisplayNegotiateVersion();
-	
-	
-	closeDisplay();
-	
-	return EXIT_FAILURE;
-}
+#include "{{ output_file_header }}
