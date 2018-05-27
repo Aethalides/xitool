@@ -1,3 +1,8 @@
+## Runtime errors
+### Segfaults
+If these are occurring on calling X functions, then check to make sure that the resource being used hasn't been closed already. E.g. calling XIQueryDevice after closing the display will cause a segfault.
+
+## Asorted noteds
    2 Virtual core pointer                          id=2    [master pointer  (3)]
    4 Virtual core XTEST pointer                id=4    [slave  pointer  (2)]
   10 Logitech G300s Optical Gaming Mouse       id=10   [slave  pointer  (2)]
@@ -23,14 +28,20 @@ and the master keyboard device points to the master pointer device.
 
 there could be devices not attached to any master
 
-[id] [type] [class] [m_id] [name]
-  2   Master Pointer   3    Virtual core pointer
-  4   Slave  Pointer   2        Virtual core XTEST pointer
- 10   Slave  Pointer   2        Logitech G300s Optical Gaming Mouse
-  3   Master Keyboard  2    Virtual core keyboard
-  5   Slave  Keyboard  3        Virtual core XTEST keyboard
-  6   Slave  Keyboard  3        Power Button
+```
+ id   type   class   ref   device name
+------------------------------------------------
+  2   master pointer   3    Virtual core pointer
+  4   slave  pointer   2        Virtual core XTEST pointer
+ 10   slave  pointer   2        Logitech G300s Optical Gaming Mouse
+  3   master keyboard  2    Virtual core keyboard
+  5   slave  keyboard  3        Virtual core XTEST keyboard
+  6   slave  keyboard  3        Power Button
+```
 
+[#] [T] [C] [R] [E] [N]
+ 2   M   P   3   Y   Virtual core pointer
+ 
 How about using ANSI colours to highlight relationship.
 For instance, matching id's will be printed in the same
 colours. (just the id/m_id numbers).

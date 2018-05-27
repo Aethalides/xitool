@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
+#include "xitool.h"
+
 #include "modules.h"
 #include "error.h"
 
@@ -21,16 +23,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #include <stdlib.h>
 #include <stdio.h>
 
+static const s_module modules[]={
 
-static size_t getLongestModuleName() {
+	{(char*) "list",'l',NULL,(char*) "list devices",list},
+	
+	{(char*) "help",'h',NULL,(char*) "shows this help screen",help},
+	
+	{(char*) "version",'v',NULL,(char*) "shows version and copyright information",version},
+	
+	{NULL,'\0',NULL}
+};
+
+
+static size_t getLongestModuleName(void) {
 	
 	size_t out=0,cur=0;
 	
-	s_module *theModules=modules;
+	const s_module *theModules=modules;
 	
-	while(theModules->modname) {
+	while(theModules->longarg) {
 	
-		cur=strlen(theModules->modname);
+		cur=strlen(theModules->longarg);
 		
 		if(cur>out)
 			out=cur;
@@ -41,9 +54,9 @@ static size_t getLongestModuleName() {
 	return out;
 }
 
-void printModuleHelp() {
+void printModuleHelp(void) {
 	
-	s_module *theModules=modules;
+	const s_module *theModules=modules;
 	
 	const char *padding="                                                    ";
 	
@@ -51,9 +64,9 @@ void printModuleHelp() {
 	
 	unsigned int current=0,padlen=0;
 		
-	while(NULL!=theModules->modname) {
+	while(NULL!=theModules->longarg) {
 	
-		current=strlen(theModules->modname);
+		current=strlen(theModules->longarg);
 		
 		padlen=longest-current;
 		
@@ -63,9 +76,11 @@ void printModuleHelp() {
 		fprintf(
 			stdout,
 			
-			"%s%*.*s %s\n%*.*s %s\n",
+			"  -%c, --%s%*.*s %s\n         %*.*s %s\n",
 		 
-			theModules->modname,
+			theModules->shortarg,
+		  
+			theModules->longarg,
 		 
 			padlen,padlen,padding,
 		
@@ -83,7 +98,7 @@ void printModuleHelp() {
 
 module chooseModule(const char* firstArgument) {
 	
-	s_module *theModules=modules;
+	const s_module *theModules=modules;
 
 	module mod_out=nomodule;
 	
@@ -103,26 +118,65 @@ module chooseModule(const char* firstArgument) {
 		strcpy(argument,firstArgument);
 	}
 	
-	while(0==strncmp("-",argument,1)) 
-		++argument;
-	
-	while(theModules->modname) {
-	
-		char first=(char) theModules->modname[0];
+	while(theModules->longarg) {
 		
-		if(0==strcmp(argument,theModules->modname) ||
-		   0==strcmp(argument,&first)) {
+		char *modlongarg=NULL, *modshortarg=NULL;
 		
+#ifndef _GNU_SOURCE
+		size_t shortlen=SHORTARGLEN;
+		
+		size_t longlen=strlen(theModules->longarg)+3;
+		
+		modshortarg=malloc(shortlen); // short hyphen+short arg
+		
+		modlongarg=malloc(longlen); // double hyphen + long arg
+
+		if(modshortarg==NULL || modlongarg==NULL) {
+		
+			free(modshortarg);
+			
+			free(modlongarg);
+			
+			die_with_error("Unable to allocate memory");
+		}
+		
+		memset(modshortarg,0,shortlen);
+		memset(modlongarg,0,longlen);
+		
+		snprintf(modshortarg,shortlen,"-%c",theModules->shortarg);
+		snprintf(modlongarg,longlen,"--%s",theModules->longarg);
+#else
+		if(-1==asprintf(&modshortarg,"-%c",theModules->shortarg))
+			die_with_error("unable to allocate memory for short argument checking");
+
+		if(-1==asprintf(&modlongarg,"--%s",theModules->longarg)) {
+			
+			free(modshortarg);
+			
+			die_with_error("unable to allocate memory for long argument checking");
+		}
+		
+#endif		
+		if(0==strcmp(modshortarg,argument) ||
+		   0==strcmp(modlongarg,argument)) {
+
+			free(modshortarg);
+			
+			free(modlongarg);
+			
 			mod_out=theModules->themodule;
 			
 			break;
 		}
 		
+		free(modshortarg);
+		
+		free(modlongarg);
+		
 		++theModules;
 	}
 	
-	if(origargumentlocation!=NULL)
-		free(origargumentlocation);
+	free(origargumentlocation);
 	
 	return mod_out;
 }

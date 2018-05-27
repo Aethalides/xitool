@@ -1,3 +1,4 @@
+
 /* This file is part of xitool.
 Copyright 2018 Andy Pieters
 This program is free software: you can redistribute it and/or modify
@@ -10,8 +11,10 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-#ifndef HAVE_QUERY_H
 
-XIDeviceInfo *it
-#define HAVE_QUERY_H
+
+#ifndef HAVE_NAMES_H
+
+
+#define HAVE_NAMES_H
 #endif

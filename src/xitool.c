@@ -38,12 +38,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
  */
 int main(int argc,char *argv[]) {
 
+	module toCall;
+
 	setInvocation(argv[0]);
 
 	argc--;
 	argv++;
 	
-	module toCall=argc?chooseModule(argv[0]):nomodule;
+	toCall=argc?chooseModule(argv[0]):nomodule;
 	
 	if(toCall==nomodule) {
 		

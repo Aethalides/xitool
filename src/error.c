@@ -12,6 +12,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
+
+#include "xitool.h"
+#include "error.h"
+
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -20,20 +24,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 static char *invocation=NULL;
 
-static void printMessageVa(const char *type,const char *error_format,va_list *args) {
+static void __attribute__ ((format (printf, 2, 0))) printMessageVa(const char *type,const char *error_format,va_list *args)  {
 	
+	char *theFormat=NULL;
+	
+#ifndef _GNU_SOURCE	
 	size_t length=strlen(error_format);
 	
-	char *theFormat=malloc(sizeof(char)*length+1);
+	theFormat=malloc(sizeof(char)*length+1);
 	
 	if(theFormat!=NULL) {
 		
 		memset(theFormat,0,length);
 	
 		strcpy(theFormat,error_format);
-	
-		theFormat[strcspn(theFormat, "\n")] = 0;
 	}
+	
+#else
+	if(-1==asprintf(&theFormat,"%s",error_format))
+		theFormat=NULL;
+#endif
+	
+	if(NULL!=theFormat)
+		theFormat[strcspn(theFormat, "\n")] = 0;
 	
 	if(NULL!=invocation) 
 		fprintf(stderr,"%s: ",invocation);
@@ -45,7 +58,7 @@ static void printMessageVa(const char *type,const char *error_format,va_list *ar
 
 	fprintf(stderr,"\n");
 	
-	if(NULL!=theFormat) free(theFormat);
+	free(theFormat);
 }
 
 void setInvocation(char *arg0) {
@@ -53,12 +66,12 @@ void setInvocation(char *arg0) {
 	invocation=arg0;
 }
 
-char* getInvocation() {
+char* getInvocation(void) {
 
 	return invocation;
 }
 
-void printMessage(const char *message_format,...) {
+void __attribute__ ((format (printf, 1, 0))) printMessage(const char *message_format,...) {
 	
 	va_list args;
 	
@@ -69,7 +82,7 @@ void printMessage(const char *message_format,...) {
 	va_end(args);
 }
 
-void printError(const char *error_format,...) {
+void __attribute__ ((format (printf, 1, 0))) printError(const char *error_format,...) {
 	
 	va_list args;
 	
@@ -80,7 +93,7 @@ void printError(const char *error_format,...) {
 	va_end(args);
 }
 
-void printNotice(const char *notice_format,...) {
+void __attribute__ ((format (printf, 1, 0))) printNotice(const char *notice_format,...) {
 	
 	va_list args;
 	
@@ -91,7 +104,7 @@ void printNotice(const char *notice_format,...) {
 	va_end(args);	
 }
 
-void printWarning(const char *warning_format,...) {
+void __attribute__ ((format (printf, 1, 0))) printWarning(const char *warning_format,...) {
 	
 	va_list args;
 	
@@ -102,7 +115,7 @@ void printWarning(const char *warning_format,...) {
 	va_end(args);	
 }
 
-void die_with_error(const char *error_format,...) {
+_Noreturn void __attribute__ ((format (printf, 1, 0))) die_with_error(const char *error_format,...) {
 
 	va_list args;
 	

@@ -19,8 +19,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #include <X11/Xutil.h>
 #include <stdlib.h>
 
-Display *openDisplay();
-void closeDisplay();
+Display *openDisplay(void);
+void closeDisplay(void);
 
 #define RESOURCES_H
 #endif

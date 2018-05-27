@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef XITOOL_H
 
 #if HAVE_CONFIG_H
-#include <config.h>
+#include "config.h"
 #endif
 
 #define START_YEAR 2018

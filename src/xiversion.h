@@ -24,10 +24,10 @@ typedef struct {
 
 typedef int (*xerrorhandler)(Display *dpy,XErrorEvent *event);
 
-xiversion getTestXiversion(const xiversion *wesupport);
-xiversion getTestXiVersionDefault();
+xiversion getTestXiversion(Display *dpy,const xiversion *wesupport);
+xiversion getTestXiVersionDefault(Display *dpy);
 
-Display *openDisplayNegotiateVersion();
+Display *openDisplayNegotiateVersion(void);
 
 #define HAVE_XIVERSION_H
 #endif

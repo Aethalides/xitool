@@ -15,7 +15,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef XIERROR_H
 
 void setInvocation(char *arg0);
-char* getInvocation();
+char* getInvocation(void);
 
 void printMessage(const char *message_format,...);
 void printError(const char *error_format,...);

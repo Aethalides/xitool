@@ -41,7 +41,9 @@ static int xiversionerrorhandler(Display *theDpy,XErrorEvent *error) {
 	return 1;
 }
 
-xiversion getTestXiversion(const xiversion *wesupport) {
+xiversion getTestXiversion(Display *dpy,const xiversion *wesupport) {
+	
+	int major,minor, result;
 	
 	xerrorhandler orig=XSetErrorHandler(xiversionerrorhandler);
 	
@@ -57,12 +59,10 @@ xiversion getTestXiversion(const xiversion *wesupport) {
 		);
 	}
 	
-	int major=wesupport->major;
-	int minor=wesupport->minor;
+	major=wesupport->major;
+	minor=wesupport->minor;
 	
-	Display *dpy=openDisplay();
-	
-	int result=XIQueryVersion(dpy,&major,&minor);
+	result=XIQueryVersion(dpy,&major,&minor);
 
 	switch(result) {
 		
@@ -89,14 +89,12 @@ xiversion getTestXiversion(const xiversion *wesupport) {
 		}
 	}
 	
-	closeDisplay();
-	
 	XSetErrorHandler(orig);
 	
 	return out;
 }
 
-xiversion getTestXiVersionDefault() {
+xiversion getTestXiVersionDefault(Display *dpy) {
 
 	const signed short major=XI_MAJOR_SUPPORTED;
 	const signed short minor=XI_MINOR_SUPPORTED;
@@ -106,15 +104,15 @@ xiversion getTestXiVersionDefault() {
 	request.major=major;
 	request.minor=minor;
 	
-	return getTestXiversion(&request);
+	return getTestXiversion(dpy,&request);
 	
 }
 
-Display *openDisplayNegotiateVersion() {
+Display *openDisplayNegotiateVersion(void) {
 
 	Display *dpy=openDisplay();
 	
-	getTestXiVersionDefault();
+	getTestXiVersionDefault(dpy);
 	
 	return dpy;
 }

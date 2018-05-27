@@ -14,6 +14,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef LIST_H
 
+#define LIST_HEADER "  id   type   class   ref   device name\
+-----------------------------------------------------------------------------"
+
 int list(int argc, char **argv);
 
 #define LIST_H

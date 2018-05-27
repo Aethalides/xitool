@@ -17,7 +17,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 static Display *theDisplay=NULL;
 
-void closeDisplay() {
+void closeDisplay(void) {
 
 	if(theDisplay!=NULL) {
 
@@ -27,7 +27,7 @@ void closeDisplay() {
 	}
 }
 
-Display *openDisplay() {
+Display *openDisplay(void) {
 
 	if(theDisplay==NULL) {
 	

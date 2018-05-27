@@ -35,13 +35,6 @@ int help(int argc, char **argv) {
 		 getInvocation()
 	);
 
-	fprintf(
-	
-		stdout,
-		 
-		"Commands may optionally be prefixed with a single or a double hyphen,\nand may be shorted to the first letter\n\n"
-	);
-	
 	printModuleHelp();
 	
 	return 1;
@@ -56,17 +49,21 @@ int version(int argc, char **argv) {
 	const char *author=AUTHOR;
 	
 	const signed short startyear=START_YEAR;
+
+	const time_t theTime=time(NULL);
 	
 	char* theYear=malloc(YEAR_LENGTH);
+
+	const struct tm *now=localtime(&theTime);
+	
+	Display *dpy=NULL;
+	
+	xiversion result;
 	
 	if(theYear==NULL)
 		die_with_error("Unable to allocate memory");
 	
 	memset(theYear,0,YEAR_LENGTH);
-	
-	const time_t theTime=time(NULL);
-	
-	const struct tm *now=localtime(&theTime);
 	
  	if(0<strftime(theYear,YEAR_LENGTH,"%Y",now))
 		snprintf(theYear,YEAR_LENGTH,"%s","2018");
@@ -84,7 +81,9 @@ int version(int argc, char **argv) {
 	
 	free(theYear);
 	
-	xiversion result=getTestXiVersionDefault();
+	dpy=openDisplay();
+	
+	result=getTestXiVersionDefault(dpy);
 	
 	if(0>=result.major||0>=result.minor)
 		die_with_error("Unable to get negotiate XI Version");
@@ -94,6 +93,8 @@ int version(int argc, char **argv) {
 		 
 		result.major,result.minor
 	);
+	
+	closeDisplay();
 	
 	return 0;
 }
