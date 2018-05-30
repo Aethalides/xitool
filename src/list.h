@@ -14,9 +14,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef LIST_H
 
+#include "table.h"
+#include <X11/extensions/XInput2.h>
+
 #define LIST_HEADER "  id   type   class   ref   device name\
 -----------------------------------------------------------------------------"
 
+//s_colour colouriseListFields(XIDeviceInfo *devinfo,unsigned char info_field);
 int list(int argc, char **argv);
 
 #define LIST_H

@@ -21,11 +21,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #include <unistd.h>
 
 static const s_colour colours[]={
-	{0,201},
-	{231,93},
-	{16,87},
-	{16,15856},
-	{-1,-1}
+	//fore,back
+	{C_BLACK,C_YELLOW},
+	{C_BLACK,C_AQUAMAR},
+	{C_BLACK,C_FUCHIA},
+	{C_WHITE,C_EINDIGO},
+	{C_BLACK,C_BABBLUE},
+	{C_BLACK,C_CHARTRS},
+	{C_EOL,C_EOL}
 };
 
 static size_t colindex=0,array_members=0,array_size=0;
@@ -147,7 +150,7 @@ static s_colour_id *getArrayMemberForId(int id) {
 
 s_colour getColourForId(int id) {
 	
-	s_colour out={15,0};
+	s_colour out={C_FG_DEF,C_BG_DEF};
 	s_colour_id *storage;
 	
 	if(-1==id) 
@@ -163,10 +166,9 @@ s_colour getColourForId(int id) {
 	
 	return out;
 }
-char *getColourForPrint(int theColour) {
 
-	s_colour colour;
-	
+char *sprintColour(s_colour *colour) {
+
 	char *out=NULL;
 	
 	static int istty=-1;
@@ -181,19 +183,24 @@ char *getColourForPrint(int theColour) {
 	
 	if(out==NULL)
 		return NULL;
-
-	colour=getColourForId(theColour);
 	
 	memset(out,0,PR_COL_LEN);
 	
 	snprintf(
 		out,PR_COL_LEN,
 		"\033[38;5;%ldm\033[48;5;%ldm",
-		colour.forecolour,
-		colour.backcolour
+		colour->forecolour==-1?C_FG_DEF:colour->forecolour,
+		colour->backcolour==-1?C_BG_DEF:colour->backcolour
 	);
 	
 	return out;
+}
+
+char *sprintColourForId(int id) {
+
+	s_colour colour=getColourForId(id);;
+	
+	return sprintColour(&colour);
 }
 
 void freeColours(void) {

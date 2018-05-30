@@ -15,6 +15,20 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 #define PR_COL_LEN 24
 
+#define C_BLACK    16 // #000000
+#define C_BABBLUE  87 // #5fffff - baby blue
+#define C_EINDIGO  93 // #8700ff - electric indigo
+#define C_AQUAMAR  85 // #5fffaf - aquamarine
+#define C_CHARTRS 118 // #87ff00 - chartreuse
+#define C_FUCHIA  201 // #ff00ff
+#define C_YELLOW  226 // #ffff00
+#define C_WHITE   231 // #ffffff
+
+#define C_BG_DEF C_BLACK
+#define C_FG_DEF C_WHITE
+
+#define C_EOL -1
+
 typedef struct {
 	long forecolour;
 	long backcolour;
@@ -28,7 +42,8 @@ typedef struct {
 s_colour getNextColour(void);
 s_colour getColourForId(int id);
 
-char *getColourForPrint(int theColour);
+char *sprintColour(s_colour *colour);
+char *sprintColourForId(int theColour);
 
 void freeColours(void);
 

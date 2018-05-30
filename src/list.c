@@ -21,7 +21,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #include "error.h"
 #include "list.h"
 #include "colours.h"
+#include "table.h"
 
+static s_colour colouriseListFields(XIDeviceInfo *devinfo,unsigned char info_field) {
+	
+	s_colour out={-1,-1};
+	
+	switch(info_field) {
+		
+		case XDEVID: {
+	
+			if(XIMasterPointer==devinfo->use||XIMasterKeyboard==devinfo->use)
+				return getColourForId(devinfo->deviceid);
+			
+			break;
+		}
+		
+		case XDEVMASTER: {
+		
+			return getColourForId(devinfo->attachment);
+			
+			break;
+		}
+	}
+			
+	return out;
+}
 
 int list(int argc, char **argv) {
 	
@@ -29,11 +54,11 @@ int list(int argc, char **argv) {
 	
 	int numdev;
 
-	XIDeviceInfo *devices,*originalpointer;
+	XIDeviceInfo *devices;
 
-	char *pr_defaultcolour=getColourForPrint(-1);
-
-	originalpointer=devices=XIQueryDevice(dpy,XIAllDevices,&numdev);
+	setColumnColouriser(colouriseListFields);
+	
+	devices=XIQueryDevice(dpy,XIAllDevices,&numdev);
 
 	if(0==numdev) {
 		
@@ -42,69 +67,44 @@ int list(int argc, char **argv) {
 		die_with_error("No X input devices found");
 	}
 
-
-	fprintf(stdout,"%s",pr_defaultcolour==NULL?"":pr_defaultcolour);
+	printTableHeader();
 	
 	for(int devcounter=0; devcounter<numdev; devcounter++) {
-	
-		char *pr_idcolour=NULL,*pr_attachmentcolour=NULL;
-		
-		if(XIMasterPointer==devices[devcounter].use||XIMasterKeyboard==devices[devcounter].use)
-			pr_idcolour=getColourForPrint(devices[devcounter].deviceid);
 
-		pr_attachmentcolour=getColourForPrint(devices[devcounter].attachment);
-
-		fprintf(
-			stdout,
-			"id=%s%02d%s, name=%s, use=%d, attachment=%s%02d%s, enabled=%s",
-			pr_idcolour==NULL?"":pr_idcolour,
-			devices[devcounter].deviceid,
-			pr_defaultcolour==NULL?"":pr_defaultcolour,
-			devices[devcounter].name,
-			devices[devcounter].use,
-			pr_attachmentcolour==NULL?"":pr_attachmentcolour,
-			devices[devcounter].attachment,
-			pr_defaultcolour==NULL?"":pr_defaultcolour,
-			devices[devcounter].enabled?"enabled":"disabled"
-		);
-		
-		free(pr_idcolour);
-		
-		free(pr_attachmentcolour);
-		
 		switch(devices[devcounter].use) {
-		
+			
 			case XIMasterPointer: 
-				fprintf(stdout,", master pointer");
-				break;
-			case XIMasterKeyboard:
-				fprintf(stdout,", master keyboard");
-				break;
-			case XISlavePointer:
-				fprintf(stdout,", slave pointer");
-				break;
-			case XISlaveKeyboard:
-				fprintf(stdout,", slave keyboard");
-				break;
-			case XIFloatingSlave:
-				fprintf(stdout,", unattached");
-				break;
+			case XIMasterKeyboard: 
+			case XIFloatingSlave: {
+			
+				printTableRow(&devices[devcounter]);
+
+				if(devices[devcounter].use!=XISlaveDetached) {
+					
+					// find dependents 
+					
+					for(int iter=0; iter<numdev; iter++) {
+					
+						if(devices[iter].attachment==devices[devcounter].deviceid &&
+						   (devices[iter].use==XISlavePointer||devices[iter].use==XISlaveKeyboard))
+							
+							printTableRow(&devices[iter]);
+					}
+				}
 				
+				break;
+			}
+			
 		}
-		
-		fprintf(stdout,"\n");
-		
 	}
 	
-	printf("found %d device(s)\n",numdev);
+	printf("found %d device%s\n",numdev,1!=numdev?"s":"");
 	
-	XIFreeDeviceInfo(originalpointer);
+	XIFreeDeviceInfo(devices);
 	
 	closeDisplay();
 	
 	freeColours();
-	
-	free(pr_defaultcolour);
 	
 	return EXIT_SUCCESS;
 }

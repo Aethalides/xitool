@@ -14,7 +14,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>. 
 bin_PROGRAMS=xitool
 
-xitool_SOURCES=xitool.c xitool.h error.c error.h resources.h resources.c modules.h modules.c versionhelp.c versionhelp.h xiversion.h xiversion.c list.c list.h colours.h colours.c
+xitool_SOURCES=xitool.c xitool.h error.c error.h resources.h resources.c modules.h modules.c versionhelp.c versionhelp.h xiversion.h xiversion.c list.c list.h colours.h colours.c table.h table.c
 
 AM_CFLAGS=$(XINPUT_CFLAGS)
 
