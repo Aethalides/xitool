@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef HAVE_XIVERSION_H
+#define HAVE_XIVERSION_H
+
 #include "resources.h"
 
 #define ERROR_LENGTH 80
@@ -29,5 +31,4 @@ xiversion getTestXiVersionDefault(Display *dpy);
 
 Display *openDisplayNegotiateVersion(void);
 
-#define HAVE_XIVERSION_H
 #endif

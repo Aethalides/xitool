@@ -4,24 +4,18 @@ This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-#ifndef LIST_H
-#define LIST_H
+#ifndef HAVE_STATE_H
+#define HAVE_STATE_H
 
-#include "table.h"
-#include <X11/extensions/XInput2.h>
+#define MAX_INT_CONVLENGTH 9
 
-#define LIST_HEADER "  id   type   class   ref   device name\
------------------------------------------------------------------------------"
-
-//s_colour colouriseListFields(XIDeviceInfo *devinfo,unsigned char info_field);
-int list(int argc, char **argv);
+int enable(int argc, char **argv);
+int disable(int argc, char **argv);
 
 #endif

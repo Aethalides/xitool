@@ -26,6 +26,11 @@
 
 int help(int argc, char **argv) {
 	
+	char *invoc=getInvocation();
+	
+	if(invoc==NULL)
+		die_with_bug("getInvocation() returned NULL");
+	
 	fprintf(
 
 		stdout,
@@ -37,7 +42,46 @@ int help(int argc, char **argv) {
 
 	printModuleHelp();
 	
-	return 1;
+	return EXIT_FAILURE;
+}
+
+int usage(const module mod,const char *error) {
+
+	s_module *currentmod=NULL;
+	char* invocation=NULL;
+	
+	if(mod==NULL)
+		die_with_bug("Usage called without module");
+	
+	if(error==NULL)
+		die_with_bug("Usage called without error");
+	
+	currentmod=getModuleByFunctionPointer(mod);
+	
+	if(currentmod->themodule==NULL)
+		die_with_bug("getModuleByFunctionPointer() returned NULL");
+	
+	invocation=getInvocation();
+	
+	if(invocation==NULL)
+		die_with_bug("getInvocation() returned NULL");
+	
+	fprintf(
+		
+		stderr,
+		 
+		 "%s: %s\nUsage: %s --%s %s\nTry '%s --help' for more information.\n",
+		 
+		invocation,error,
+			
+		invocation,currentmod->longarg,
+		 
+		currentmod->argument_help,
+		 
+		invocation
+	);
+	
+	return EXIT_FAILURE;
 }
 
 int version(int argc, char **argv) {
@@ -96,7 +140,7 @@ int version(int argc, char **argv) {
 	
 	closeDisplay();
 	
-	return 0;
+	return EXIT_SUCCESS;
 }
 
 int nomodule(int argc,char **argv) {
@@ -106,5 +150,5 @@ int nomodule(int argc,char **argv) {
 	
 	fprintf(stderr,"Try '%s --help' for more information.\n",getInvocation());
 	
-	return 1;
+	return EXIT_FAILURE;
 }

@@ -13,13 +13,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef VERSIONABOUTHELP_H
+#define VERSIONABOUTHELP_H
+
+#include "modules.h"
 
 #define YEAR_LENGTH 5
 
 int help(int argc, char **argv);
 int version(int argc, char** argv);
-
+int usage(const module module,const char* error);
 int nomodule(int argc,char **argv);
 
-#define VERSIONABOUTHELP_H
 #endif

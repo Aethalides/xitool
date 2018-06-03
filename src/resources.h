@@ -13,6 +13,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef RESOURCES_H
+#define RESOURCES_H
+
 #include <X11/Xlib.h>
 #include <X11/extensions/XInput.h>
 #include <X11/extensions/XInput2.h>
@@ -22,5 +24,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 Display *openDisplay(void);
 void closeDisplay(void);
 
-#define RESOURCES_H
 #endif

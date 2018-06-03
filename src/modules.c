@@ -25,15 +25,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 static const s_module modules[]={
 
-	{(char*) "list",'l',NULL,(char*) "list devices",list},
+	{(char*) "list",'l',NULL,(char*) "lists devices",list},
 	
+	{(char*) "enable",'e',(char*) "<device> [<device> ...]",(char*) "enables device(s) ",enable},
+	
+	{(char*) "disable",'d',(char*) "<device> [<device> ...]",(char*) "disables device(s) ",disable},
+
 	{(char*) "help",'h',NULL,(char*) "shows this help screen",help},
 	
 	{(char*) "version",'v',NULL,(char*) "shows version and copyright information",version},
 	
 	{NULL,'\0',NULL}
 };
-
 
 static size_t getLongestModuleName(void) {
 	
@@ -76,7 +79,7 @@ void printModuleHelp(void) {
 		fprintf(
 			stdout,
 			
-			"  -%c, --%s%*.*s %s\n         %*.*s %s\n",
+			"  -%c, --%s%*.*s %s\n%*.*s %s\n\n",
 		 
 			theModules->shortarg,
 		  
@@ -94,6 +97,30 @@ void printModuleHelp(void) {
 		++theModules;
 	}
 	
+	#ifdef HELP_FOOTER
+		fputs(HELP_FOOTER,stdout);
+	#endif
+}
+
+s_module *getModuleByFunctionPointer(module fp) {
+	
+	const s_module *theModules=modules;
+	
+	s_module *out=NULL;
+	
+	while(theModules->longarg) {
+	
+		if(fp==theModules->themodule) {
+			
+			out=(s_module*) theModules;
+			
+			break;
+		}
+		
+		theModules++;
+	}
+	
+	return out;
 }
 
 module chooseModule(const char* firstArgument) {

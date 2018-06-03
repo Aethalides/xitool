@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef XIERROR_H
+#define XIERROR_H
 
 void setInvocation(char *arg0);
 char* getInvocation(void);
@@ -23,6 +24,6 @@ void printWarning(const char *warning_format,...);
 void printNotice(const char *notice_format,...);
 
 void die_with_error(const char *error_format,...);
+void die_with_bug(const char *bug_format,...);
 
-#define XIERROR_H
 #endif

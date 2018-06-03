@@ -12,15 +12,21 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-#ifndef MODULES_H
-#include "versionhelp.h"
-#include "list.h"
-
-
-#define SHORTARGLEN 3
+#ifndef HAVE_MODULES_H
+#define HAVE_MODULES_H
 
 typedef int (*module)(int argc, char **argv);
 
+#include "versionhelp.h"
+#include "list.h"
+#include "state.h"
+
+#define SHORTARGLEN 3
+
+#define HELP_FOOTER \
+   "<device> number       --> interpret as device id number\n<device> alphanumeric --> interpret as device name\n"
+
+   
 typedef struct {
 	char *longarg;
 	char shortarg;
@@ -31,6 +37,7 @@ typedef struct {
 } s_module;
 
 module chooseModule(const char* firstArgument);
+s_module *getModuleByFunctionPointer(module fp);
 void printModuleHelp(void);
 
 #endif

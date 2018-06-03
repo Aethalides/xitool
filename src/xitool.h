@@ -13,6 +13,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #ifndef XITOOL_H
+#define XITOOL_H
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -24,5 +25,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 #define XI_MAJOR_SUPPORTED 2
 #define XI_MINOR_SUPPORTED 50
 
-#define XITOOL_H
 #endif

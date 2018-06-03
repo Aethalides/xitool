@@ -79,11 +79,15 @@ static void resizeArray(size_t new_size_members) {
 		
 	} else if(new_size_members>array_size) {
 	
-#ifdef _GNU_SOURCE
-		new_pointer=reallocarray(colour_id_array,sizeof(s_colour_id*),new_size_members);
-#else
-		new_pointer=realloc(colour_id_array,sizeof(s_colour_id*)*new_size_members);
-#endif
+		#ifdef _GNU_SOURCE
+			
+			new_pointer=reallocarray(colour_id_array,sizeof(s_colour_id*),new_size_members);
+			
+		#else
+		
+			new_pointer=realloc(colour_id_array,sizeof(s_colour_id*)*new_size_members);
+			
+		#endif
 	}
 	
 	if(new_pointer==NULL) {
@@ -188,7 +192,7 @@ char *sprintColour(s_colour *colour) {
 	
 	snprintf(
 		out,PR_COL_LEN,
-		"\033[38;5;%ldm\033[48;5;%ldm",
+		PRINT_FG_BG_TEMPLATE,
 		colour->forecolour==-1?C_FG_DEF:colour->forecolour,
 		colour->backcolour==-1?C_BG_DEF:colour->backcolour
 	);

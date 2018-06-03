@@ -12,8 +12,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 
 #ifndef HAVE_COLOURS_H
+#define HAVE_COLOURS_H
 
-#define PR_COL_LEN 24
+#define PRINT_FG_BG_TEMPLATE "\033[38;5;%ldm\033[48;5;%ldm"
+
+#define PR_COL_LEN_f(s) ((sizeof(s)/sizeof(s[0]))-1)
+
+#define PR_COL_LEN PR_COL_LEN_f(PRINT_FG_BG_TEMPLATE)
 
 #define C_BLACK    16 // #000000
 #define C_BABBLUE  87 // #5fffff - baby blue
@@ -49,5 +54,4 @@ void freeColours(void);
 
 #define COLOURLIST_INITIAL_SIZE 2
 
-#define HAVE_COLOURS_H
 #endif
